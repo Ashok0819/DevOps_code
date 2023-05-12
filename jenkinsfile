@@ -1,0 +1,24 @@
+node {
+    def remoteUser = "ubuntu"
+    def remoteHost = "ec2-44-210-111-60.compute-1.amazonaws.com"
+    
+    stage('Checkout') {
+        git 'https://github.com/Ashok0819/DevOps_code.git'
+    }
+    
+    stage('Deploy') {
+        steps {
+            sshagent(['remote-ssh']) {
+                sh """
+                    ssh -o StrictHostKeyChecking=no ${remoteUser}@${remoteHost} << EOF
+                    sudo apt-get update -y
+                    sudo apt-get install -y docker.io docker-compose
+                    cp docker-compose.yml ./docker-compose.yml
+                    sudo docker-compose up -d
+                    exit
+                    EOF
+                """
+            }
+        }
+    }
+}

@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  web:
+    image: ashok0819/nginx-webserver:latest
+    container_name: webserver
+    ports:
+      - "80:80"
+    networks:
+      - "custom_network"
+
+networks:
+  custom_network: {}
